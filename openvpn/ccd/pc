@@ -1,0 +1,4 @@
+
+ifconfig-push 10.8.0.100 255.255.255.0
+#ifconfig-push 10.8.0.10 10.8.0.1
+#push "redirect-gateway"
