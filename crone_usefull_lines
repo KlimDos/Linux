@@ -1,0 +1,7 @@
+sasha@aa_desk ~ $ cat /etc/cron.d/telegram 
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+# m h dom mon dow user  command
+#* * * * * sasha telegram-send --config ~/tlgm.conf "tteesstt"
+* * * * * sasha ps aux |grep "32257"| grep -v grep >> /dev/null || telegram-send --config ~/tlgm.conf "the task has been complited!"
