@@ -5,3 +5,26 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 # m h dom mon dow user  command
 #* * * * * sasha telegram-send --config ~/tlgm.conf "tteesstt"
 * * * * * sasha ps aux |grep "32257"| grep -v grep >> /dev/null || telegram-send --config ~/tlgm.conf "the task has been complited!"
+
+#to get ngrok url
+curl localhost:4040/status | grep -oE -e "[0-9]+\.ngrok.io" | head -1 | telegram-send --config tlgm.conf --stdin
+
+
+
+  GNU nano 2.8.6                                                       File: GoInbound                                                                  
+
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+#* * * * * sasha cd /home/sasha/GoInbound && python3 GoInbound.py >> /dev/null && telegram-send --config tlgm.conf "GoInbound ERROR occured!"
+#* * * * * sasha python3 ~/GoInbound/GoInbound.py >> /dev/null && telegram-send --config ~/GoInbound/tlgm.conf "GoInbound ERROR occured!"
+#* * * * * sasha /bin/bash /home/sasha/GoInbound/wrapper.sh
+
+# start flask server
+@reboot sasha sleep 5 && /usr/bin/screen -dmS GoInbound_server /home/sasha/GoInbound/wrapper_server.sh
+# start ngrok server
+@reboot sasha sleep 10 && /usr/bin/screen -dmS ngrok_server /home/sasha/GoInbound/ngrok http 8090
+# send new ngrok url
+@reboot sasha  sleep 15 && curl localhost:4040/status | grep -oE -e "[0-9]+\.ngrok.io" | head -1 | telegram-send --config ~/GoInbound/tlgm.conf --stdin
+# check the schedule 
+* * * * * sasha /home/sasha/GoInbound/wrapper.sh
+ 
